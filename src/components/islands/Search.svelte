@@ -24,9 +24,9 @@
 	let selectedEngine = $state('mostly-center');
 	let gcseLoaded = $state(false);
 
-	// Check if there's a search query anywhere in URL
+	// Check if there's a search query anywhere in URL (including GCSE hash)
 	function hasSearchQuery(): boolean {
-		return window.location.href.includes('q=');
+		return window.location.href.includes('q=') || hasGcseSearchQuery();
 	}
 
 	// Get URL without GCSE hash (for comparison)
@@ -46,9 +46,15 @@
 		return false;
 	}
 
-	// Check if hashchange is just a GCSE hash change (ignore those)
+	// Check if hashchange is a GCSE hash change
 	function isGcseHashChange(): boolean {
 		return window.location.hash.startsWith('#gsc');
+	}
+
+	// Check if GCSE hash contains a search query
+	function hasGcseSearchQuery(): boolean {
+		const hash = window.location.hash;
+		return hash.includes('gsc.q=');
 	}
 
 	// Load saved preference from localStorage
@@ -65,19 +71,23 @@
 		loadGCSE();
 
 		// Poll for URL changes - fast until q= detected, then slow down
-		// Ignore GCSE hash-only changes
 		let urlPollInterval: ReturnType<typeof setInterval>;
 		let lastUrl = getUrlWithoutGcseHash();
+		let lastHadSearch = hasSearchQuery();
 
 		const startPolling = (interval: number) => {
 			if (urlPollInterval) clearInterval(urlPollInterval);
 			urlPollInterval = setInterval(() => {
 				const currentUrl = getUrlWithoutGcseHash();
-				if (currentUrl !== lastUrl) {
+				const currentHasSearch = hasSearchQuery();
+
+				// Update if URL changed OR if search query appeared/disappeared in hash
+				if (currentUrl !== lastUrl || currentHasSearch !== lastHadSearch) {
 					lastUrl = currentUrl;
+					lastHadSearch = currentHasSearch;
 					updateHeroVisibility();
 					// Once q= detected, slow down polling
-					if (hasSearchQuery()) {
+					if (currentHasSearch) {
 						startPolling(1000);
 					}
 				}
@@ -96,11 +106,10 @@
 
 		setTimeout(() => clearInterval(heroCheckInterval), 2000);
 
-		// Listen to hashchange but ignore GCSE hash changes
+		// Listen to hashchange - always update hero visibility on hash changes
+		// (GCSE hash changes include search queries we need to detect)
 		const handleHashChange = () => {
-			if (!isGcseHashChange()) {
-				updateHeroVisibility();
-			}
+			updateHeroVisibility();
 		};
 		window.addEventListener('hashchange', handleHashChange);
 		window.addEventListener('popstate', updateHeroVisibility);
@@ -314,15 +323,17 @@
 		margin: 0 auto !important;
 	}
 
-	/* Center results */
+	/* Center results with max-width for readability */
 	:global(.gsc-wrapper) {
 		width: 100% !important;
-		max-width: 100% !important;
+		max-width: 900px !important;
 		margin: 0 auto !important;
 	}
 
 	:global(.gsc-results) {
 		width: 100% !important;
+		max-width: 900px !important;
+		margin: 0 auto !important;
 	}
 
 	:global(.gsc-result) {
@@ -336,6 +347,45 @@
 
 	:global(.gsc-result:hover) {
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+	}
+
+	/* Responsive search box and results */
+	@media (max-width: 768px) {
+		:global(.gsc-search-box) {
+			width: 95% !important;
+		}
+
+		:global(.gsc-wrapper),
+		:global(.gsc-results) {
+			padding: 0 0.5rem !important;
+		}
+
+		:global(.gsc-result) {
+			padding: 0.75rem !important;
+		}
+
+		.selector-inner {
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+
+		.selector-hint {
+			text-align: center;
+		}
+	}
+
+	@media (max-width: 480px) {
+		:global(.gsc-search-box) {
+			width: 100% !important;
+		}
+
+		:global(.gsc-result) {
+			padding: 0.5rem !important;
+		}
+
+		.engine-selector {
+			padding: 0.75rem 1rem;
+		}
 	}
 
 	/* Hide GCSE refinement/annotations bar */
