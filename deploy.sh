@@ -15,7 +15,7 @@ set -e
 # Configuration
 ##
 AWS_PROFILE="${AWS_PROFILE:-default}"
-BUCKET="${BUCKET:-s3://your-bucket-name}"
+BUCKET="${S3_BUCKET:-s3://your-bucket-name}"
 SITE_DIR="dist/"
 
 # CloudFront distribution ID must be set via environment variable
