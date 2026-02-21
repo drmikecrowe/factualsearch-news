@@ -192,11 +192,7 @@
 	// Pagination
 	let totalPages = $derived(Math.ceil(filteredSources.length / ITEMS_PER_PAGE));
 
-	let paginatedSources = $derived(() => {
-		const start = (currentPage - 1) * ITEMS_PER_PAGE;
-		const end = start + ITEMS_PER_PAGE;
-		return filteredSources.slice(start, end);
-	});
+	let paginatedSources = $derived(filteredSources.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE));
 
 	function handleSort(column: SortColumn) {
 		if (sortColumn === column) {
@@ -241,11 +237,11 @@
 		return classes[bias] || '';
 	}
 
-	let visiblePages = $derived(() => {
+	function computeVisiblePages(current: number, total: number): number[] {
 		const pages: number[] = [];
 		const maxVisible = 5;
-		let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-		const end = Math.min(totalPages, start + maxVisible - 1);
+		let start = Math.max(1, current - Math.floor(maxVisible / 2));
+		const end = Math.min(total, start + maxVisible - 1);
 
 		if (end - start + 1 < maxVisible) {
 			start = Math.max(1, end - maxVisible + 1);
@@ -256,7 +252,9 @@
 		}
 
 		return pages;
-	});
+	}
+
+	let visiblePages = $derived(computeVisiblePages(currentPage, totalPages));
 </script>
 
 {#if loading}
@@ -355,7 +353,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each paginatedSources() as source}
+				{#each paginatedSources as source}
 					<tr>
 						<td>
 							<a
@@ -402,7 +400,7 @@
 				Previous
 			</button>
 
-			{#each visiblePages() as page}
+			{#each visiblePages as page}
 				<button
 					class="page-btn"
 					class:active={page === currentPage}
@@ -412,7 +410,7 @@
 				</button>
 			{/each}
 
-			{#if totalPages > visiblePages()[visiblePages().length - 1]}
+			{#if totalPages > visiblePages[visiblePages.length - 1]}
 				<span class="ellipsis">...</span>
 			{/if}
 
