@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /assets/*
+Allow: /sitemap.xml
+Host: https://factualsearch.news
+
+Sitemap: https://factualsearch.news/sitemap.xml

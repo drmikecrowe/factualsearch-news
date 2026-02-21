@@ -1,0 +1,91 @@
+---
+export interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+
+// Navigation items
+const navItems = [
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about/' },
+  { name: 'Sites', href: '/sites/' },
+  { name: 'Terms', href: '/terms/' },
+  { name: 'Privacy', href: '/privacy/' },
+];
+---
+
+<header class="header-gradient">
+  <div class="container mx-auto px-4">
+    <nav class="flex items-center justify-between py-4">
+      <!-- Logo -->
+      <a href="/" class="flex items-center group">
+        <img
+          src="/assets/logo.svg"
+          alt="Factual News Search"
+          class="h-10 transition-transform group-hover:scale-105"
+        />
+      </a>
+
+      <!-- Navigation Links -->
+      <div class="flex items-center gap-1">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "nav-link",
+              (currentPath === item.href || currentPath + '/' === item.href) && "nav-link-active"
+            ]}
+          >
+            {item.name}
+          </a>
+        ))}
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Clean navigation: bypass GCSE interference -->
+<script>
+  document.querySelector('header nav')?.addEventListener('click', (e) => {
+    const target = (e.target as Element | null)?.closest('a[href]');
+    if (target) {
+      const href = target.getAttribute('href');
+      if (href && href.startsWith('/')) {
+        // Prevent GCSE from interfering - force hard navigation
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        // Use replace to bypass any GCSE URL manipulation
+        window.location.replace(href);
+      }
+    }
+  }, true); // capture phase
+</script>
+
+<style>
+  .header-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .nav-link {
+    padding: 0.5rem 1rem;
+    color: #4b5563;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: #2563eb;
+    background: rgba(37, 99, 235, 0.08);
+  }
+
+  .nav-link-active {
+    color: #2563eb;
+    background: rgba(37, 99, 235, 0.1);
+    font-weight: 600;
+  }
+</style>

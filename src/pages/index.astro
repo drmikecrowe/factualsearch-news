@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Search from '../components/islands/Search.svelte';
+import MbfcNews from '../components/islands/MbfcNews.svelte';
+---
+
+<BaseLayout
+  title="factualSearch.news - Search Factual News Sources"
+  description="Curated search of factual news sources"
+>
+  <!-- Hero Section -->
+  <section id="hero-section" class="hero-gradient">
+    <div class="container mx-auto px-4 py-12 md:py-16">
+      <div class="max-w-3xl mx-auto text-center">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          Find <span class="text-gradient">Factual</span> News Sources
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 mb-8">
+          Search curated news from sources with
+          <span class="font-semibold text-green-600">Very High</span>,
+          <span class="font-semibold text-green-600">High</span>, or
+          <span class="font-semibold text-green-600">Mostly Factual</span>
+          reporting ratings by Media Bias/Fact Check
+        </p>
+
+        <!-- Quick Stats -->
+        <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-8">
+          <div class="stat-item">
+            <span class="stat-number">500+</span>
+            <span class="stat-label">Factual Sources</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">9</span>
+            <span class="stat-label">Search Categories</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Free to Use</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search Section -->
+  <section class="bg-white py-8 md:py-10">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <Search client:load />
+      </div>
+    </div>
+  </section>
+
+  <!-- News Section -->
+  <MbfcNews slot="pre-footer" client:visible />
+</BaseLayout>
+
+<style>
+  .hero-gradient {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #faf5ff 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-gradient::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    border: 1px solid rgba(37, 99, 235, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .stat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+  }
+</style>

@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Custom theme extensions can go here */
+@theme {
+  --font-family-sans: system-ui, -apple-system, sans-serif;
+}

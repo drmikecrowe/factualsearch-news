@@ -1,0 +1,66 @@
+---
+import ShareButtons from './ShareButtons.astro';
+
+// Dynamic year for copyright
+const year = new Date().getFullYear();
+
+// Navigation items
+const footerLinks = [
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about/' },
+  { name: 'Sites', href: '/sites/' },
+  { name: 'Terms', href: '/terms/' },
+  { name: 'Privacy', href: '/privacy/' },
+];
+---
+
+<footer class="footer-gradient border-t border-gray-200">
+  <div class="container mx-auto px-4 py-6">
+    <div class="flex flex-col gap-4">
+      <!-- Top Row: MBFC Attribution, Share Buttons, Copyright -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Left: MBFC Attribution -->
+        <div class="flex items-center gap-2 text-sm text-gray-600">
+          <span>Factual rankings via</span>
+          <a
+            href="https://mediabiasfactcheck.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+          >
+            Media Bias/Fact Check
+          </a>
+        </div>
+
+        <!-- Center/Right: Share Buttons -->
+        <ShareButtons />
+
+        <!-- Right: Copyright -->
+        <div class="text-sm text-gray-500">
+          &copy; {year}
+          <a href="/" class="text-blue-600 hover:text-blue-700 font-medium ml-1 transition-colors">
+            factualsearch.news
+          </a>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Navigation Links -->
+      <div class="flex items-center justify-center gap-4 pt-2 border-t border-gray-200">
+        {footerLinks.map((item) => (
+          <a
+            href={item.href}
+            class="text-sm text-gray-500 hover:text-blue-600 transition-colors"
+          >
+            {item.name}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-gradient {
+    background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
+  }
+</style>

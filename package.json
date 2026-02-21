@@ -1,0 +1,29 @@
+{
+  "name": "fns",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "deploy": "bash deploy.sh",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "check": "astro check && svelte-check --tsconfig ./tsconfig.json",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/svelte": "^7.2.5",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.17.2",
+    "svelte": "^5.51.2",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "svelte-check": "^4.4.0",
+    "typescript": "^5.8.2"
+  }
+}
