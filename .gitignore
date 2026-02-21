@@ -27,3 +27,6 @@ stats.html
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# mise (contains local env vars and infrastructure secrets)
+mise.toml
