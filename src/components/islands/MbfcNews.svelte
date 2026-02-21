@@ -6,8 +6,6 @@
 		link: string;
 		pubDate: string;
 		description: string;
-		content?: string;
-		creator?: string;
 	}
 
 	interface CachedNews {
@@ -23,7 +21,7 @@
 
 	const SLIDE_INTERVAL = 4000;
 	const CACHE_KEY = 'mbfc-news-cache';
-	const CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+	const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 	let intervalId: ReturnType<typeof setInterval>;
 
 	onMount(() => {
@@ -63,6 +61,18 @@
 		}
 	}
 
+	function decodeHtml(html: string): string {
+		const txt = document.createElement('textarea');
+		txt.innerHTML = html;
+		return txt.value;
+	}
+
+	function stripHtml(html: string): string {
+		const div = document.createElement('div');
+		div.innerHTML = html;
+		return (div.textContent || div.innerText || '').trim();
+	}
+
 	async function fetchNews() {
 		// Try cache first
 		const cached = getCachedNews();
@@ -73,26 +83,36 @@
 			return;
 		}
 
-		// Fetch fresh data
 		try {
-			const response = await fetch('/api/rss.xml');
+			const response = await fetch(
+				'https://mediabiasfactcheck.com/wp-json/wp/v2/posts?per_page=10'
+			);
 
 			if (!response.ok) {
 				throw new Error(`HTTP ${response.status}`);
 			}
 
-			const data = await response.json();
+			const posts = await response.json();
 
-			if (data.status === 'ok' && data.items?.length > 0) {
-				news = data.items;
-				cacheNews(data.items);
+			const items: NewsItem[] = posts
+				.map((post: { title?: { rendered?: string }; link?: string; date?: string; excerpt?: { rendered?: string } }) => ({
+					title: decodeHtml(post.title?.rendered || ''),
+					link: post.link || '',
+					pubDate: post.date || '',
+					description: stripHtml(post.excerpt?.rendered || '').slice(0, 200),
+				}))
+				.filter((item: NewsItem) => item.title && item.link);
+
+			if (items.length > 0) {
+				news = items;
+				cacheNews(items);
 				startSlider();
 			} else {
-				error = data.message || 'No news available';
+				error = 'No news available';
 			}
 		} catch (e) {
 			error = 'Failed to load news';
-			console.error('RSS fetch error:', e);
+			console.error('WP API fetch error:', e);
 		} finally {
 			loading = false;
 		}
@@ -149,7 +169,7 @@
 				<a
 					href="https://mediabiasfactcheck.com/"
 					target="_blank"
-					rel="noopener"
+					rel="noopener noreferrer"
 					class="hover:text-blue-600 transition-colors"
 				>
 					Latest from Media Bias/Fact Check
@@ -198,7 +218,7 @@
 								<a
 									href={item.link}
 									target="_blank"
-									rel="noopener"
+									rel="noopener noreferrer"
 									class="slide-link"
 								>
 									<h3 class="slide-title">{item.title}</h3>
@@ -209,10 +229,7 @@
 										<time datetime={item.pubDate}>
 											{formatDate(item.pubDate)}
 										</time>
-										{#if item.creator}
-											<span class="slide-author">by {item.creator}</span>
-										{/if}
-									</div>
+											</div>
 								</a>
 							{/if}
 						</div>
