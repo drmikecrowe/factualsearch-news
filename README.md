@@ -1,44 +1,65 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# factualSearch.news
 
-## Available Scripts
+A curated search engine for factual news — powered by [Media Bias/Fact Check](https://mediabiasfactcheck.com) ratings and Google Custom Search.
 
-In the project directory, you can run:
+**Live site:** [factualsearch.news](https://factualsearch.news)
 
-### `npm start`
+---
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## What It Does
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Most search engines index everything. This one doesn't.
 
-### `npm test`
+factualSearch.news restricts results to news sources that Media Bias/Fact Check has rated **Very High**, **High**, or **Mostly Factual** in reporting accuracy. Satire, conspiracy, and low-credibility sources are excluded entirely.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Every source is also labeled with its political bias — Left, Left-Center, Least Biased, Right-Center, Right, or Pro-Science — so you can understand the perspective behind what you're reading, and actively seek out multiple viewpoints.
 
-### `npm run build`
+### Search Categories
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Category | What's included |
+|---|---|
+| **Mostly Center** *(default)* | Left-Center + Least Biased + Right-Center |
+| **Least Bias Only** | Minimally biased, highly credible sources |
+| **Left Leaning** | Left + Left-Center combined |
+| **Right Leaning** | Right + Right-Center combined |
+| **Left Center Only** | Slight to moderate liberal bias |
+| **Right Center Only** | Slight to moderate conservative bias |
+| **Left Only** | Moderate to strong liberal bias |
+| **Right Only** | Moderate to strong conservative bias |
+| **Pro-Science** | Evidence-based scientific sources |
+| **Fact Checking** | Dedicated fact-checking organizations |
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Your last-used category is saved locally in the browser so it persists between visits.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Source Database
 
-### `npm run eject`
+The [/sites](https://factualsearch.news/sites) page lists every source in the index with its bias rating, factual reporting level, and a direct link to its Media Bias/Fact Check entry. The database contains 500+ sources and is filterable and searchable.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Why I Built This
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Misinformation spreads because it's easy to share and hard to verify. Most people don't fact-check what they read — not because they don't care, but because finding credible sources takes effort.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+This tool removes that friction. Instead of searching the whole web and hoping for the best, you search a pre-vetted corpus of factual sources. You can still choose your preferred bias direction, but everything in the results meets a baseline standard of factual accuracy.
 
-## Learn More
+The mission: **Be aware. Be informed. Combat propaganda by researching with purpose.**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Tech Stack
+
+- **[Astro 5](https://astro.build)** — static site framework
+- **[Svelte 5](https://svelte.dev)** — interactive islands (search, source table, news feed)
+- **[Tailwind CSS 4](https://tailwindcss.com)** — styling
+- **[Google Custom Search Engine](https://programmablesearch.google.com)** — search backend, one CSE per bias category
+- **[Media Bias/Fact Check](https://mediabiasfactcheck.com)** — source ratings and bias classifications
+- **AWS S3 + CloudFront** — hosting and CDN
+
+Deployed as a fully static site. No server, no database, no user accounts.
+
+---
+
+## Data Sources
+
+Bias ratings and factual reporting levels are sourced exclusively from [Media Bias/Fact Check](https://mediabiasfactcheck.com). This project does not assign, modify, or editorialize any ratings — it uses their classifications as-is to determine which sources appear in the search index.
