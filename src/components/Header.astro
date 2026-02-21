@@ -55,8 +55,8 @@ const navItems = [
         // Prevent GCSE from interfering - force hard navigation
         e.preventDefault();
         e.stopImmediatePropagation();
-        // Use replace to bypass any GCSE URL manipulation
-        window.location.replace(href);
+        // Use assign to bypass any GCSE URL manipulation while preserving history
+        window.location.assign(href);
       }
     }
   }, true); // capture phase

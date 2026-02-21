@@ -25,7 +25,7 @@ const {
 // Construct full image URL for OG
 const ogImageUrl = new URL(image, Astro.site);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const gaMeasurementId = 'UA-131553259-1'; // Existing property - may need GA4 migration
+const gaMeasurementId = import.meta.env.GA_MEASUREMENT_ID || 'G-TLMNLSLHPN';
 ---
 
 <!doctype html>
@@ -81,7 +81,7 @@ const gaMeasurementId = 'UA-131553259-1'; // Existing property - may need GA4 mi
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', window.GA_MEASUREMENT_ID || 'UA-131553259-1');
+      gtag('config', gaMeasurementId);
     </script>
   </head>
   <body class="flex flex-col min-h-screen">
