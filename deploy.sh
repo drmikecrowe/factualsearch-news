@@ -1,16 +1,28 @@
 #!/bin/bash
 # Deploy Astro static site to S3 with CloudFront invalidation
 # Usage: bash deploy.sh
+#
+# Required environment variables:
+#   CLOUDFRONT_DISTRIBUTION_ID - CloudFront distribution ID for cache invalidation
+#
+# Optional environment variables:
+#   AWS_PROFILE - AWS CLI profile name (default: default)
+#   BUCKET      - S3 bucket URL (default: s3://your-bucket-name)
 
 set -e
 
 ##
 # Configuration
 ##
-AWS_PROFILE="your-aws-profile"
-BUCKET="s3://your-bucket-name"
+AWS_PROFILE="${AWS_PROFILE:-default}"
+BUCKET="${BUCKET:-s3://your-bucket-name}"
 SITE_DIR="dist/"
-CLOUDFRONT_DISTRIBUTION_ID="your-cloudfront-distribution-id"
+
+# CloudFront distribution ID must be set via environment variable
+if [ -z "$CLOUDFRONT_DISTRIBUTION_ID" ]; then
+    echo "Error: CLOUDFRONT_DISTRIBUTION_ID environment variable is required"
+    exit 1
+fi
 
 ##
 # Deploy
