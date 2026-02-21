@@ -173,7 +173,7 @@
 	}
 </script>
 
-<main class="search-container">
+<main class="search-container w-full max-w-full">
 	<!-- Engine Selector -->
 	<div class="engine-selector">
 		<div class="selector-inner">
@@ -197,8 +197,7 @@
 	</div>
 
 	<!-- Google Search Container -->
-	<div id="gcse-container">
-		
+	<div id="gcse-container" class="w-full max-w-full">
 	</div>
 </main>
 
@@ -323,17 +322,15 @@
 		margin: 0 auto !important;
 	}
 
-	/* Center results with max-width for readability */
+	/* Center results */
 	:global(.gsc-wrapper) {
 		width: 100% !important;
-		max-width: 900px !important;
+		max-width: 100% !important;
 		margin: 0 auto !important;
 	}
 
 	:global(.gsc-results) {
 		width: 100% !important;
-		max-width: 900px !important;
-		margin: 0 auto !important;
 	}
 
 	:global(.gsc-result) {
@@ -351,13 +348,13 @@
 
 	/* Responsive search box and results */
 	@media (max-width: 768px) {
-		:global(.gsc-search-box) {
-			width: 95% !important;
+		/* Force GCSE children to fit container */
+		#gcse-container :global(*) {
+			max-width: 100% !important;
 		}
 
-		:global(.gsc-wrapper),
-		:global(.gsc-results) {
-			padding: 0 0.5rem !important;
+		:global(.gsc-search-box) {
+			width: 95% !important;
 		}
 
 		:global(.gsc-result) {
@@ -376,7 +373,7 @@
 
 	@media (max-width: 480px) {
 		:global(.gsc-search-box) {
-			width: 100% !important;
+			width: 95% !important;
 		}
 
 		:global(.gsc-result) {
