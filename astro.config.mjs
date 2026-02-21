@@ -11,7 +11,7 @@ const __dirname = dirname(__filename);
 
 export default defineConfig({
   site: 'https://factualsearch.news',
-  output: 'static',
+  output: 'hybrid',
   integrations: [
     svelte(),
     sitemap()
