@@ -158,7 +158,6 @@
 	}
 
 	function handleEngineChange(newEngine: string) {
-		console.log('[GCSE] handleEngineChange() called with:', newEngine);
 		selectedEngine = newEngine;
 		localStorage.setItem('searchEngine', newEngine);
 		loadGCSE();
@@ -190,7 +189,7 @@
 
 	<!-- Google Search Container -->
 	<div id="gcse-container">
-		{@html `<gcse:search defaultToRefinement="${selectedEngine}"></gcse:search>`}
+		
 	</div>
 </main>
 
@@ -270,14 +269,24 @@
 	:global(.gsc-control-cse) {
 		border: none !important;
 		background: transparent !important;
-		max-width: 640px !important;
 		width: 100% !important;
+		max-width: 100% !important;
 	}
 
 	:global(.gsc-control-wrapper-cse) {
-		max-width: 640px !important;
 		width: 100% !important;
+		max-width: 100% !important;
 		margin: 0 auto !important;
+	}
+
+	:global(.gsc-search-box) {
+		width: 80% !important;
+		margin: 0 auto 1.5rem auto !important;
+	}
+
+	:global(.gsc-search-box-tools),
+	:global(.gsc-input-box) {
+		width: 100% !important;
 	}
 
 	:global(.gsc-input-box) {
@@ -307,7 +316,8 @@
 
 	/* Center results */
 	:global(.gsc-wrapper) {
-		max-width: 900px !important;
+		width: 100% !important;
+		max-width: 100% !important;
 		margin: 0 auto !important;
 	}
 
@@ -328,14 +338,11 @@
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 	}
 
-	/* Style refinement tabs */
-	:global(.gsc-refinementHeader) {
-		justify-content: center !important;
-	}
-
-	:global(.gsc-refinementhInactive),
-	:global(.gsc-refinementhActive) {
-		border-radius: 0.5rem !important;
-		padding: 0.5rem 1rem !important;
+	/* Hide GCSE refinement/annotations bar */
+	:global(.gsc-refinementsArea),
+	:global(.gsc-refinementHeader),
+	:global(.gsc-tabsArea),
+	:global(.gsc-above-wrapper-area-container) {
+		display: none !important;
 	}
 </style>
